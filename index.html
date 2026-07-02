@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Hub | Projects & Thoughts</title>
+    
+    <!-- No-bullshit styling: Tailwind for layout, custom CSS for the complex theme -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* * THEME: Green Space Liquid Glass Aurora
+         */
+        :root {
+            --space-bg: #030a06;
+            --glass-bg: rgba(16, 35, 25, 0.3);
+            --glass-border: rgba(110, 231, 183, 0.15);
+            --glass-highlight: rgba(110, 231, 183, 0.4);
+        }
+
+        body {
+            background-color: var(--space-bg);
+            color: #ecfdf5; /* text-emerald-50 */
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* 1. Aurora Background Animation */
+        .aurora-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #05140c 0%, #020604 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 45vw;
+            height: 45vw;
+            background: #047857; /* Emerald 600 */
+            top: -10%;
+            left: -10%;
+        }
+
+        .orb-2 {
+            width: 35vw;
+            height: 35vw;
+            background: #0d9488; /* Teal 600 */
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 40vw;
+            height: 40vw;
+            background: #166534; /* Green 800 */
+            top: 40%;
+            left: 30%;
+            animation-delay: -10s;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(5vw, 10vh) scale(1.1); }
+            66% { transform: translate(-5vw, -5vh) scale(0.9); }
+            100% { transform: translate(10vw, -10vh) scale(1); }
+        }
+
+        /* 2. Liquid Glassmorphism Components */
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 
+                0 4px 24px -1px rgba(0, 0, 0, 0.2),
+                inset 0 0 12px rgba(255, 255, 255, 0.02);
+            border-radius: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle glare effect inside glass */
+        .liquid-glass::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.03), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.7s;
+        }
+
+        .liquid-glass:hover::before {
+            left: 150%;
+        }
+
+        .glass-hover:hover {
+            transform: translateY(-4px);
+            background: rgba(20, 45, 32, 0.4);
+            border-color: var(--glass-highlight);
+            box-shadow: 
+                0 12px 32px -4px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(52, 211, 153, 0.15),
+                inset 0 0 12px rgba(255, 255, 255, 0.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--space-bg); }
+        ::-webkit-scrollbar-thumb { background: rgba(52, 211, 153, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(52, 211, 153, 0.5); }
+    </style>
+</head>
+<body class="antialiased selection:bg-emerald-500/30 selection:text-emerald-100">
+
+    <!-- Background -->
+    <div class="aurora-wrapper">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Main Layout -->
+    <main class="relative z-10 max-w-4xl mx-auto px-6 py-16 md:py-24">
+        
+        <!-- Header Section -->
+        <header class="liquid-glass p-8 md:p-12 mb-16 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-br from-emerald-100 via-emerald-300 to-teal-600">
+                Hi, I'm [Your Name]
+            </h1>
+            <p class="text-lg md:text-xl text-emerald-100/70 max-w-2xl mx-auto font-light leading-relaxed">
+                Welcome to my digital space. A straight-to-the-point collection of my projects, experiments, and writing.
+            </p>
+            <div class="mt-8 flex justify-center gap-4">
+                <a href="https://github.com/yourusername" target="_blank" class="liquid-glass glass-hover px-6 py-2 text-sm font-medium text-emerald-200 inline-flex items-center gap-2">
+                    GitHub
+                </a>
+                <a href="mailto:your@email.com" class="liquid-glass glass-hover px-6 py-2 text-sm font-medium text-emerald-200 inline-flex items-center gap-2">
+                    Contact
+                </a>
+            </div>
+        </header>
+
+        <!-- Projects Section -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold mb-8 text-emerald-50 flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span>
+                Projects
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- COPY THIS BLOCK TO ADD A PROJECT -->
+                <a href="https://link-to-project.com" target="_blank" class="liquid-glass glass-hover p-6 flex flex-col h-full cursor-pointer no-underline block">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-emerald-100">Project Alpha</h3>
+                        <span class="text-xs font-mono px-2 py-1 rounded-md bg-emerald-900/40 text-emerald-300 border border-emerald-500/20">2026</span>
+                    </div>
+                    <p class="text-emerald-100/60 text-sm flex-grow leading-relaxed mb-6">
+                        A scalable, low-latency API gateway written in Go. Handles routing, rate limiting, and analytics.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-auto text-xs font-medium text-emerald-400/80">
+                        <span>#Go</span>
+                        <span>#Docker</span>
+                        <span>#API</span>
+                    </div>
+                </a>
+                <!-- END PROJECT BLOCK -->
+
+                <!-- COPY THIS BLOCK TO ADD A PROJECT -->
+                <a href="https://link-to-project2.com" target="_blank" class="liquid-glass glass-hover p-6 flex flex-col h-full cursor-pointer no-underline block">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-emerald-100">Nexus UI</h3>
+                        <span class="text-xs font-mono px-2 py-1 rounded-md bg-emerald-900/40 text-emerald-300 border border-emerald-500/20">2025</span>
+                    </div>
+                    <p class="text-emerald-100/60 text-sm flex-grow leading-relaxed mb-6">
+                        A strictly vanilla JS component library focused on accessibility and minimal payload size.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-auto text-xs font-medium text-emerald-400/80">
+                        <span>#JavaScript</span>
+                        <span>#CSS</span>
+                        <span>#A11y</span>
+                    </div>
+                </a>
+                <!-- END PROJECT BLOCK -->
+
+            </div>
+        </section>
+
+        <!-- Blog/Writing Section -->
+        <section>
+            <h2 class="text-2xl font-semibold mb-8 text-emerald-50 flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-teal-400 shadow-[0_0_10px_rgba(45,212,191,0.8)]"></span>
+                Writing & Pages
+            </h2>
+            
+            <div class="flex flex-col gap-4">
+                
+                <!-- COPY THIS BLOCK TO ADD A BLOG POST -->
+                <a href="/blog/the-myth-of-clean-code.html" class="liquid-glass glass-hover p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left w-full group">
+                    <div class="flex flex-col gap-1">
+                        <h3 class="text-lg font-semibold text-emerald-100 group-hover:text-white transition-colors">
+                            The Myth of Clean Code
+                        </h3>
+                        <p class="text-sm text-emerald-100/50">
+                            Why keeping it simple beats keeping it abstract.
+                        </p>
+                    </div>
+                    <div class="text-sm font-mono text-emerald-400/70 whitespace-nowrap">
+                        Jul 01, 2026
+                    </div>
+                </a>
+                <!-- END BLOG BLOCK -->
+
+                <!-- COPY THIS BLOCK TO ADD A BLOG POST -->
+                <a href="/blog/deploying-on-github-pages.html" class="liquid-glass glass-hover p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left w-full group">
+                    <div class="flex flex-col gap-1">
+                        <h3 class="text-lg font-semibold text-emerald-100 group-hover:text-white transition-colors">
+                            Zero-Bullshit Deployment
+                        </h3>
+                        <p class="text-sm text-emerald-100/50">
+                            Hosting scalable static sites on GitHub Pages for free.
+                        </p>
+                    </div>
+                    <div class="text-sm font-mono text-emerald-400/70 whitespace-nowrap">
+                        Jun 15, 2026
+                    </div>
+                </a>
+                <!-- END BLOG BLOCK -->
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-20 text-center text-emerald-100/40 text-sm">
+            <p>&copy; 2026 [Your Name]. Kept simple.</p>
+        </footer>
+
+    </main>
+</body>
+</html>
