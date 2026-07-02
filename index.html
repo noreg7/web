@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Food Safety Ecosystem Analysis 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap');
+
+        :root {
+            --bg-warm: #FDFBF7;
+            --accent-terracotta: #C05621;
+            --accent-sage: #2F855A;
+            --text-main: #2D3748;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-warm);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .nav-link.active {
+            color: var(--accent-terracotta);
+            border-bottom: 2px solid var(--accent-terracotta);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #CBD5E0;
+            border-radius: 10px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container { height: 280px; }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+<!-- Chosen Palette: Warm Earth & Clinical Clean (Neutrals, Terracotta, Sage) -->
+<!-- Application Structure Plan: 
+    1. Executive Dashboard: Immediate high-level metrics (DALYs, Vacancies, Inspections).
+    2. Statutory Matrix: Interactive filterable grid of FSS Act penalties.
+    3. Enforcement Lens: Comparative visualizations of state-level performance (SFSI).
+    4. Adulteration Lab: Visual breakdown of chemical processes and recent spice crises.
+    5. Labeling Truths: "Before & After" style comparison of brand claims vs. actual ingredients.
+    6. Nutraceutical Audit: Visualizing the CPP2 protein study findings.
+    7. 2026 Reform Pathway: Visual tiers for the new licensing framework.
+    Rationale: This structure moves from the abstract legal framework to concrete field data, then to specific consumer impacts, ending with future-looking reforms.
+-->
+<!-- Visualization & Content Choices: 
+    - Bar Charts (Chart.js): Comparing State Enforcement (Criminal vs Civil).
+    - Radar Chart (Chart.js): Displaying SFSI scores across 5 parameters.
+    - Interactive Grid (HTML/JS): Penalty Matrix with hover/filter capability.
+    - Comparison Cards: Story vs Mrs Bectors 'Health-washing' analysis.
+    - Scatter/Grouped Bar: Protein quality in Nutraceuticals vs Pharmaceuticals.
+    - Confirmation: NO SVG used. NO Mermaid JS used. All graphics utilize HTML/CSS/Canvas.
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<nav class="fixed top-0 w-full z-50 glass-card mx-auto mt-4 max-w-6xl left-0 right-0 px-6 py-3 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-orange-700 rounded-full flex items-center justify-center text-white font-bold">F</div>
+        <span class="font-bold tracking-tight text-lg hidden md:block">India Food Safety 2026</span>
+    </div>
+    <div class="flex gap-6 text-sm font-semibold overflow-x-auto no-scrollbar whitespace-nowrap">
+        <a href="#overview" class="nav-link hover:text-orange-700 transition">Overview</a>
+        <a href="#penalties" class="nav-link hover:text-orange-700 transition">Legal Matrix</a>
+        <a href="#enforcement" class="nav-link hover:text-orange-700 transition">State Data</a>
+        <a href="#adulteration" class="nav-link hover:text-orange-700 transition">Case Studies</a>
+        <a href="#nutra" class="nav-link hover:text-orange-700 transition">Supplements</a>
+    </div>
+</nav>
+
+<main class="container mx-auto px-4 pt-28 pb-12">
+    <!-- Section: Overview -->
+    <section id="overview" class="mb-20">
+        <div class="max-w-4xl mx-auto text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 text-gray-800">The 2026 Food Safety Ecosystem</h1>
+            <p class="text-xl text-gray-600 leading-relaxed">
+                An exhaustive inquiry into the statutory frameworks, toxicological failures, and corporate health-washing prevalent in India's current food safety landscape. Explore the intersection of policy and public health.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-card p-8 stat-card">
+                <p class="text-orange-700 font-bold text-4xl mb-2">57.1M</p>
+                <p class="text-gray-700 font-semibold mb-1">Annual DALYs Lost</p>
+                <p class="text-xs text-gray-500">Total health burden from foodborne illness in India (ICMR/WHO).</p>
+            </div>
+            <div class="glass-card p-8 stat-card">
+                <p class="text-orange-700 font-bold text-4xl mb-2">40%</p>
+                <p class="text-gray-700 font-semibold mb-1">Officer Vacancy Rate</p>
+                <p class="text-xs text-gray-500">Persistent deficit in Food Safety Officer (FSO) positions across states.</p>
+            </div>
+            <div class="glass-card p-8 stat-card">
+                <p class="text-orange-700 font-bold text-4xl mb-2">15th</p>
+                <p class="text-gray-700 font-semibold mb-1">Global Health Risk Rank</p>
+                <p class="text-xs text-gray-500">India's rank in foodborne years of lives lost per 100k persons.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Statutory Matrix -->
+    <section id="penalties" class="mb-20">
+        <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+            <h2 class="text-3xl font-bold mb-4">The Statutory Penal Architecture</h2>
+            <p class="text-gray-600 mb-8 max-w-3xl">
+                The Food Safety and Standards Act (2006) provides an exhaustive, self-contained code for food safety. Under the Jan Vishwas Act (2023), penalties are adjusted for inflation every three years. Explore the escalating matrix of fines and imprisonment.
+            </p>
+            
+            <div class="mb-6 flex flex-wrap gap-4">
+                <button onclick="filterPenalties('all')" class="px-4 py-2 bg-gray-800 text-white rounded-full text-sm">All Sections</button>
+                <button onclick="filterPenalties('penalty')" class="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-50">Monetary Only</button>
+                <button onclick="filterPenalties('criminal')" class="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-50">Criminal / Prison</button>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-gray-200">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="p-4 font-semibold text-sm">Section</th>
+                            <th class="p-4 font-semibold text-sm">Offense</th>
+                            <th class="p-4 font-semibold text-sm">Penalty / Imprisonment</th>
+                        </tr>
+                    </thead>
+                    <tbody id="penaltyBody">
+                        <!-- JS injected rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Enforcement Lens -->
+    <section id="enforcement" class="mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl font-bold mb-6">State-Level Enforcement Disparities</h2>
+                <p class="text-gray-600 mb-6">
+                    While central inspections have grown (reaching 26,267 in FY 2024-25), state-level execution varies wildly. Staff shortages lead to unfeasible inspection targets, where one officer in Kerala manages up to 10,000 units.
+                </p>
+                <div class="p-6 bg-orange-50 border-l-4 border-orange-600 rounded-r-lg">
+                    <p class="italic text-orange-900 font-medium">"Only 17% of required Strength of Designated Officers (DOs) is currently available nationally, creating massive administrative bottlenecks."</p>
+                </div>
+            </div>
+            <div class="glass-card p-6">
+                <h3 class="text-center font-bold mb-4 text-gray-700">Samples vs. Decided Cases (2024-25)</h3>
+                <div class="chart-container">
+                    <canvas id="enforcementChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-16 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="text-2xl font-bold mb-8 text-center">State Food Safety Index (SFSI) Performance</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="chart-container h-80">
+                    <canvas id="radarKerala"></canvas>
+                    <p class="text-center mt-2 text-xs font-bold">Kerala (Rank 1 - Large)</p>
+                </div>
+                <div class="chart-container h-80">
+                    <canvas id="radarGujarat"></canvas>
+                    <p class="text-center mt-2 text-xs font-bold">Gujarat (Rank 5 - Large)</p>
+                </div>
+                <div class="chart-container h-80">
+                    <canvas id="radarAndhra"></canvas>
+                    <p class="text-center mt-2 text-xs font-bold">Andhra Pradesh (Rank 18 - Large)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Adulteration Deep Dive -->
+    <section id="adulteration" class="mb-20">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">The Chemistry of Adulteration</h2>
+                <p class="text-gray-600">From synthetic paneer to pesticide-laden spices, industrial chemicals are infiltrating domestic supply chains.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-gray-900 text-white p-8 rounded-2xl">
+                    <h3 class="text-xl font-bold mb-4 text-orange-400">Synthetic Paneer Synthesis</h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-4 items-start">
+                            <div class="bg-orange-400 text-black px-2 py-1 rounded text-xs font-bold">Step 1</div>
+                            <p class="text-sm">Urea, Detergent, and Palm Oil are emulsified with water to mimic milk's white liquid appearance.</p>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="bg-orange-400 text-black px-2 py-1 rounded text-xs font-bold">Step 2</div>
+                            <p class="text-sm">Sulfuric or Hydrochloric Acid is added to rapidly precipitate solids from the synthetic milk analogue.</p>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="bg-orange-400 text-black px-2 py-1 rounded text-xs font-bold">Step 3</div>
+                            <p class="text-sm">The mixture is pressed into sheets and packaged in unhygienic, clandestine units for local caterers.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-2xl border border-red-100">
+                    <h3 class="text-xl font-bold mb-4 text-red-700">The Ethylene Oxide (EtO) Crisis</h3>
+                    <p class="text-sm text-gray-700 mb-4 leading-relaxed">
+                        International recalls (Hong Kong, Singapore) of MDH and Everest spices triggered a 40% export risk. EtO is a Group 1 carcinogen used as a sterilization gas.
+                    </p>
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <p class="text-xs font-bold text-red-900 mb-1">Regulatory Clash:</p>
+                        <p class="text-xs text-red-800">In April 2024, FSSAI raised the default MRL for unspecified pesticides tenfold (0.01 to 0.1 mg/kg), drawing backlash from health advocates.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-8">
+                <h3 class="text-2xl font-bold mb-6">Corporate Health-Washing Analysis</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="border-l-4 border-orange-500 pl-6">
+                        <p class="font-bold text-lg">"100% Whole Wheat" (Mrs. Bectors)</p>
+                        <p class="text-sm text-gray-600 mt-2"><strong>Claim:</strong> 100% Atta Bread.</p>
+                        <p class="text-sm text-red-600 mt-1"><strong>Reality:</strong> Admitted 73%–87% Atta; contained Maida fillers, INS 150 (Caramel Color), and palm oil.</p>
+                    </div>
+                    <div class="border-l-4 border-teal-500 pl-6">
+                        <p class="font-bold text-lg">"100% Tender Coconut" (Storia)</p>
+                        <p class="text-sm text-gray-600 mt-2"><strong>Claim:</strong> 100% Natural Coconut Water.</p>
+                        <p class="text-sm text-red-600 mt-1"><strong>Reality:</strong> Reconstituted concentrate (9.6%) + water + Potassium Sorbate (INS 202).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Nutraceutical Paradox -->
+    <section id="nutra" class="mb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="glass-card p-8">
+                <h3 class="text-2xl font-bold mb-6 text-center">Citizens Protein Project 2 (CPP2)</h3>
+                <p class="text-sm text-gray-600 mb-6">Comparison of 34 Whey Protein powders. Mismatch between Retail (Nutraceutical) vs. Clinical (Pharmaceutical) quality.</p>
+                <div class="chart-container">
+                    <canvas id="proteinChart"></canvas>
+                </div>
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold mb-6">The CDSCO-FSSAI Jurisdictional Split</h2>
+                <p class="text-gray-600 mb-6">
+                    As of 2026, a clear boundary exists: FSSAI governs "Wellness and Prevention" (within 100% RDA), while CDSCO assumes control over "Therapeutic Interventions" and high-dose botanical extracts.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-gray-100">
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">!</div>
+                        <div>
+                            <p class="font-bold text-sm">Nitrogen Spiking</p>
+                            <p class="text-xs text-gray-500">89% of Medical-Pharmaceutical brands detected for spiking to inflate protein readings.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-gray-100">
+                        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">X</div>
+                        <div>
+                            <p class="font-bold text-sm">Contaminants</p>
+                            <p class="text-xs text-gray-500">Aflatoxins and Heavy Metals (Cadmium/Arsenic) were significantly higher in Pharma-led supplements.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: 2026 Reform Pathways -->
+    <section id="reforms" class="mb-20">
+        <div class="bg-gray-800 text-white rounded-3xl p-10">
+            <h2 class="text-3xl font-bold mb-10 text-center">2026 Licensing Reform Pathway</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gray-700 mx-auto rounded-full flex items-center justify-center mb-4 border border-gray-600 text-2xl">01</div>
+                    <h4 class="font-bold text-lg mb-2">Basic Registration</h4>
+                    <p class="text-gray-400 text-sm">Up to ₹1.5 Crore turnover (Raised from ₹12L). Targets cloud kitchens & micro-vendors.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gray-700 mx-auto rounded-full flex items-center justify-center mb-4 border border-gray-600 text-2xl">02</div>
+                    <h4 class="font-bold text-lg mb-2">State License</h4>
+                    <p class="text-gray-400 text-sm">₹1.5Cr to ₹50Cr turnover. Requires floor layouts and equipment lists.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gray-700 mx-auto rounded-full flex items-center justify-center mb-4 border border-gray-600 text-2xl">03</div>
+                    <h4 class="font-bold text-lg mb-2">Central License</h4>
+                    <p class="text-gray-400 text-sm">Above ₹50Cr. Mandatory for Importers, Exporters, and E-commerce platforms.</p>
+                </div>
+            </div>
+            <div class="mt-12 p-6 bg-gray-700 rounded-xl text-center">
+                <p class="text-orange-400 font-bold">NEW: Perpetual Validity</p>
+                <p class="text-sm">Licenses remain active indefinitely provided annual fees and Form D-1 (Compliance Return) are filed by May 31.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-gray-50 border-t border-gray-200 py-12 px-4">
+    <div class="container mx-auto text-center">
+        <p class="text-sm text-gray-500 max-w-2xl mx-auto">
+            This application is for informational purposes only, synthesizing statutory and toxicological reports from the 2026 food safety ecosystem. For legal or medical guidance, consult official FSSAI/CDSCO documentation or health professionals.
+        </p>
+        <div class="mt-6 flex justify-center gap-4 text-xs font-bold text-gray-400">
+            <span>&copy; 2026 INFRASTRUCTURE ARCHITECT</span>
+            <span>DATA SOURCE: ANALYSIS REPORT 2026</span>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Data Storage
+    const penaltyData = [
+        { section: "50", type: "penalty", offense: "Substandard Quality", limit: "Up to ₹2 Lakh (₹25k for Petty)" },
+        { section: "51", type: "penalty", offense: "Substandard Food", limit: "Up to ₹5 Lakh" },
+        { section: "52", type: "penalty", offense: "Misbranded Food", limit: "Up to ₹3 Lakh" },
+        { section: "53", type: "penalty", offense: "Misleading Advertisement", limit: "Up to ₹10 Lakh" },
+        { section: "59", type: "criminal", offense: "Unsafe Food (Death)", limit: "Life Imprisonment + min ₹10 Lakh" },
+        { section: "63", type: "criminal", offense: "Operating without License", limit: "6 months + up to ₹5 Lakh" },
+        { section: "64", type: "criminal", offense: "Recidivism (Repeat)", limit: "Double Penalty + Cancellation" },
+        { section: "39", type: "penalty", offense: "Vexatious FSO Seizure", limit: "₹1 Lakh fine on the Officer" }
+    ];
+
+    // Initialization
+    window.onload = () => {
+        renderPenalties('all');
+        initCharts();
+    };
+
+    function renderPenalties(filter) {
+        const body = document.getElementById('penaltyBody');
+        body.innerHTML = '';
+        const filtered = filter === 'all' ? penaltyData : penaltyData.filter(d => d.type === filter);
+        
+        filtered.forEach(item => {
+            const row = document.createElement('tr');
+            row.className = 'border-b border-gray-100 hover:bg-orange-50 transition';
+            row.innerHTML = `
+                <td class="p-4 font-bold text-orange-800 text-sm">Sec ${item.section}</td>
+                <td class="p-4 text-sm font-medium text-gray-700">${item.offense}</td>
+                <td class="p-4 text-sm text-gray-600">${item.limit}</td>
+            `;
+            body.appendChild(row);
+        });
+    }
+
+    function filterPenalties(type) {
+        renderPenalties(type);
+    }
+
+    function initCharts() {
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#718096';
+
+        // Enforcement Bar Chart
+        const ctxEnforcement = document.getElementById('enforcementChart').getContext('2d');
+        new Chart(ctxEnforcement, {
+            type: 'bar',
+            data: {
+                labels: ['Gujarat', 'Kerala', 'Karnataka', 'Andhra', 'Haryana'],
+                datasets: [
+                    {
+                        label: 'Civil Cases Penalty',
+                        data: [859, 1088, 283, 464, 599],
+                        backgroundColor: '#C05621'
+                    },
+                    {
+                        label: 'Criminal Convictions',
+                        data: [91, 206, 32, 8, 59],
+                        backgroundColor: '#2D3748'
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: { legend: { position: 'bottom' } },
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Radar Charts for SFSI
+        const radarConfig = (data) => ({
+            type: 'radar',
+            data: {
+                labels: ['HR/Inst', 'Compliance', 'Food Testing', 'Training', 'Consumer'],
+                datasets: [{
+                    label: 'Score',
+                    data: data,
+                    backgroundColor: 'rgba(192, 86, 33, 0.2)',
+                    borderColor: '#C05621',
+                    pointBackgroundColor: '#C05621'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { r: { min: 0, max: 20, ticks: { display: false } } }
+            }
+        });
+
+        new Chart(document.getElementById('radarKerala').getContext('2d'), radarConfig([8.5, 15, 13.5, 8, 16]));
+        new Chart(document.getElementById('radarGujarat').getContext('2d'), radarConfig([10, 12, 13.5, 4, 9]));
+        new Chart(document.getElementById('radarAndhra').getContext('2d'), radarConfig([4.5, 10, 1, 4.5, 4]));
+
+        // Protein Quality Chart
+        const ctxProtein = document.getElementById('proteinChart').getContext('2d');
+        new Chart(ctxProtein, {
+            type: 'bar',
+            data: {
+                labels: ['Protein Content (g)', 'Label Mismatch (%)', 'Sugar Presence (%)'],
+                datasets: [
+                    {
+                        label: 'Nutraceutical (Retail)',
+                        data: [75.6, 6, 8],
+                        backgroundColor: '#2F855A'
+                    },
+                    {
+                        label: 'Pharmaceutical (Clinical)',
+                        data: [29.1, 83, 44],
+                        backgroundColor: '#E53E3E'
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: { legend: { position: 'bottom' } },
+                scales: { x: { grid: { display: false } }, y: { grid: { display: false } } }
+            }
+        });
+    }
+</script>
+</body>
+</html>
