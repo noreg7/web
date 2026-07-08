@@ -15,6 +15,23 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================
+    // TOAST NOTIFICATION UTILITY
+    // ==========================================
+    window.showToast = (msg) => {
+        const toast = document.getElementById('toast-notification');
+        const toastText = document.getElementById('toast-text');
+        if (toast && toastText) {
+            toastText.textContent = msg;
+            toast.classList.add('active');
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+    };
+
+    // ==========================================
     // 0. TABS SWITCHING LOGIC
     // ==========================================
     const tabs = document.querySelectorAll('.nav-tab');
@@ -422,6 +439,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         const cardHeader = document.createElement('div');
                         cardHeader.className = 'resource-card-header';
                         cardHeader.appendChild(titleGroup);
+                        cardHeader.innerHTML += `
+                            <svg class="link-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="7" y1="17" x2="17" y2="7"></line>
+                                <polyline points="7 7 17 7 17 17"></polyline>
+                            </svg>
+                        `;
                         card.appendChild(cardHeader);
                         
                         if (item.description) {
@@ -657,6 +680,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <a href="${matchItem.url}" target="_blank" class="resource-title-link">${highlightedName}</a>
                                         ${matchItem.starred ? '<svg class="favorite-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' : ''}
                                     </div>
+                                    <svg class="link-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                                        <polyline points="7 7 17 7 17 17"></polyline>
+                                    </svg>
                                 </div>
                                 ${highlightedDesc ? `<p class="resource-desc">${highlightedDesc}</p>` : ''}
                             `;
