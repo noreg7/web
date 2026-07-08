@@ -1,18 +1,22 @@
 /**
  * MY HUB // INTERACTIVE DESIGNS (2026 STANDARDS)
  * Vanilla JS features:
- * 1. Navigation Tab Switching (Resources Hub vs Portfolio Content)
- * 2. Dynamic Resources Hub Rendering (Categories, Sections, Cards, Blockquotes, Alerts)
- * 3. Fuzzy search filter with highlighted matching text
- * 4. Magnetic Custom Cursor with Lerp Physics
- * 5. High-Performance Canvas Interactive Particle System
- * 6. 3D Card Tilt + Cursor Glow Tracking
- * 7. Command Palette (Search, Navigation, Arrow key bindings, Resources lookup integration)
- * 8. Portfolio Tag Filter logic with Micro-animations
- * 9. Interactive Contact/Inquiry modal binding
+ * 1. Mobile & Touch Screen Optimizations (Disables heavy calculations/animations)
+ * 2. Navigation Tab Switching (Resources Hub vs Portfolio Content)
+ * 3. Dynamic Resources Hub Rendering (Optimized JSON keys with Batch/Lazy Rendering)
+ * 4. Fuzzy search filter with highlighted matching text
+ * 5. Magnetic Custom Cursor with Lerp Physics (PC Only)
+ * 6. High-Performance Canvas Interactive Particle System (PC Only)
+ * 7. 3D Card Tilt + Cursor Glow Tracking (PC Only)
+ * 8. Command Palette (Search, Navigation, Arrow key bindings, Resources lookup integration)
+ * 9. Portfolio Tag Filter logic with Micro-animations
+ * 10. Interactive Contact/Inquiry modal binding with Custom Toast alerts
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    // Mobile/Touch device detection
+    const isMobile = window.innerWidth <= 1024 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
     // ==========================================
     // TOAST NOTIFICATION UTILITY
@@ -30,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 3000);
         }
     };
+
 
     // ==========================================
     // 0. TABS SWITCHING LOGIC
@@ -60,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // 1. MAGNETIC CUSTOM CURSOR
+    // 1. MAGNETIC CUSTOM CURSOR (PC Only)
     // ==========================================
     const cursorOuter = document.getElementById('cursor-outer');
     const cursorInner = document.getElementById('cursor-inner');
@@ -73,35 +78,41 @@ document.addEventListener('DOMContentLoaded', () => {
     let isHovering = false;
     let isClicking = false;
 
-    // Track mouse coordinates
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        // Instant inner dot placement
-        if (cursorInner) {
-            cursorInner.style.left = `${mouseX}px`;
-            cursorInner.style.top = `${mouseY}px`;
-        }
-    });
+    if (!isMobile) {
+        // Track mouse coordinates
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            if (cursorInner) {
+                cursorInner.style.left = `${mouseX}px`;
+                cursorInner.style.top = `${mouseY}px`;
+            }
+        });
 
-    // Outer Cursor Lerp (Smooth Follow Physics)
-    function renderCursor() {
-        const lerpFactor = 0.15; // Speed of outer outline spring
-        cursorX += (mouseX - cursorX) * lerpFactor;
-        cursorY += (mouseY - cursorY) * lerpFactor;
-        
-        if (cursorOuter) {
-            cursorOuter.style.left = `${cursorX}px`;
-            cursorOuter.style.top = `${cursorY}px`;
-        }
-        
+        // Outer Cursor Lerp (Smooth Follow Physics)
+        const renderCursor = () => {
+            const lerpFactor = 0.15;
+            cursorX += (mouseX - cursorX) * lerpFactor;
+            cursorY += (mouseY - cursorY) * lerpFactor;
+            
+            if (cursorOuter) {
+                cursorOuter.style.left = `${cursorX}px`;
+                cursorOuter.style.top = `${cursorY}px`;
+            }
+            
+            requestAnimationFrame(renderCursor);
+        };
         requestAnimationFrame(renderCursor);
+    } else {
+        // Hide custom cursor elements on mobile
+        if (cursorOuter) cursorOuter.style.display = 'none';
+        if (cursorInner) cursorInner.style.display = 'none';
     }
-    requestAnimationFrame(renderCursor);
 
-    // Hover state hooks
+    // Hover state hooks (Only add classes if cursor elements are active)
     const updateCursorHoverState = (active) => {
+        if (isMobile) return;
         isHovering = active;
         if (active) {
             document.body.classList.add('cursor-hovering');
@@ -110,18 +121,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Click state hooks
-    document.addEventListener('mousedown', () => {
-        isClicking = true;
-        document.body.classList.add('cursor-clicking');
-    });
-    document.addEventListener('mouseup', () => {
-        isClicking = false;
-        document.body.classList.remove('cursor-clicking');
-    });
+    if (!isMobile) {
+        document.addEventListener('mousedown', () => {
+            isClicking = true;
+            document.body.classList.add('cursor-clicking');
+        });
+        document.addEventListener('mouseup', () => {
+            isClicking = false;
+            document.body.classList.remove('cursor-clicking');
+        });
+    }
 
     // Connect event listeners to all interactive items
     const registerHoverTargets = () => {
+        if (isMobile) return;
         const targets = document.querySelectorAll('.magnet-target, a, button, input, select, textarea, .filter-btn, .blog-item, .category-nav-btn, .resource-card');
         targets.forEach(target => {
             target.removeEventListener('mouseenter', () => updateCursorHoverState(true));
@@ -134,114 +147,140 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // 2. CANVAS INTERACTIVE PARTICLES
+    // 2. CANVAS INTERACTIVE PARTICLES (PC Only)
     // ==========================================
     const canvas = document.getElementById('particle-canvas');
     if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let connectionDistance = 100;
-        let numParticles = 60;
-        
-        const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            numParticles = Math.min(60, Math.floor((canvas.width * canvas.height) / 25000));
-            initParticles();
-        };
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.radius = Math.random() * 1.5 + 1;
-            }
+        if (!isMobile) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let connectionDistance = 100;
+            let numParticles = 60;
             
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            const resizeCanvas = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                numParticles = Math.min(60, Math.floor((canvas.width * canvas.height) / 25000));
+                initParticles();
+            };
 
-                const dx = mouseX - this.x;
-                const dy = mouseY - this.y;
-                const dist = Math.hypot(dx, dy);
-                if (dist < 120) {
-                    const force = (120 - dist) / 120;
-                    this.x -= (dx / dist) * force * 0.8;
-                    this.y -= (dy / dist) * force * 0.8;
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.4;
+                    this.vy = (Math.random() - 0.5) * 0.4;
+                    this.radius = Math.random() * 1.5 + 1;
+                }
+                
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+                    const dx = mouseX - this.x;
+                    const dy = mouseY - this.y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < 120) {
+                        const force = (120 - dist) / 120;
+                        this.x -= (dx / dist) * force * 0.8;
+                        this.y -= (dy / dist) * force * 0.8;
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(52, 211, 153, 0.25)';
+                    ctx.fill();
                 }
             }
 
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(52, 211, 153, 0.25)';
-                ctx.fill();
-            }
-        }
+            const initParticles = () => {
+                particles = [];
+                for (let i = 0; i < numParticles; i++) {
+                    particles.push(new Particle());
+                }
+            };
 
-        const initParticles = () => {
-            particles = [];
-            for (let i = 0; i < numParticles; i++) {
-                particles.push(new Particle());
-            }
-        };
-
-        const animateParticles = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
-                    if (dist < connectionDistance) {
-                        const alpha = (1 - (dist / connectionDistance)) * 0.12;
+            const animateParticles = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+                        if (dist < connectionDistance) {
+                            const alpha = (1 - (dist / connectionDistance)) * 0.12;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(52, 211, 153, ${alpha})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+                    
+                    const mouseDist = Math.hypot(particles[i].x - mouseX, particles[i].y - mouseY);
+                    if (mouseDist < 150) {
+                        const alpha = (1 - (mouseDist / 150)) * 0.15;
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(52, 211, 153, ${alpha})`;
+                        ctx.lineTo(mouseX, mouseY);
+                        ctx.strokeStyle = `rgba(45, 212, 191, ${alpha})`;
                         ctx.lineWidth = 0.8;
                         ctx.stroke();
                     }
                 }
-                
-                const mouseDist = Math.hypot(particles[i].x - mouseX, particles[i].y - mouseY);
-                if (mouseDist < 150) {
-                    const alpha = (1 - (mouseDist / 150)) * 0.15;
-                    ctx.beginPath();
-                    ctx.moveTo(particles[i].x, particles[i].y);
-                    ctx.lineTo(mouseX, mouseY);
-                    ctx.strokeStyle = `rgba(45, 212, 191, ${alpha})`;
-                    ctx.lineWidth = 0.8;
-                    ctx.stroke();
-                }
-            }
 
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
 
-            requestAnimationFrame(animateParticles);
-        };
+                requestAnimationFrame(animateParticles);
+            };
 
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        animateParticles();
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            animateParticles();
+        } else {
+            // Hide and skip canvas entirely on mobile/tablet
+            canvas.style.display = 'none';
+        }
     }
 
 
     // ==========================================
-    // 3. 3D CARD TILT + GLOW TRACKING
+    // 3. 3D CARD TILT + GLOW TRACKING (PC Only)
     // ==========================================
     const registerCardTilts = () => {
         const cards = document.querySelectorAll('.project-card, .resource-card');
         cards.forEach(card => {
             if (card.dataset.tiltInitialized) return;
             card.dataset.tiltInitialized = "true";
+            
+            // Set basic hover triggers for click events
+            if (card.classList.contains('resource-card')) {
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.aux-link-pill')) return;
+                    const titleLink = card.querySelector('.resource-title-link');
+                    if (titleLink) {
+                        window.open(titleLink.href, '_blank');
+                    }
+                });
+            } else {
+                card.addEventListener('click', () => {
+                    const url = card.getAttribute('data-url');
+                    if (url) {
+                        window.open(url, '_blank');
+                    }
+                });
+            }
+
+            // Only bind heavy mouse movement calculations on desktop
+            if (isMobile) return;
             
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
@@ -262,26 +301,6 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('mouseleave', () => {
                 card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
             });
-            
-            // Handle card clicking for resource cards
-            if (card.classList.contains('resource-card')) {
-                card.addEventListener('click', (e) => {
-                    // Do not navigate if clicking inside auxiliary pill links
-                    if (e.target.closest('.aux-link-pill')) return;
-                    
-                    const titleLink = card.querySelector('.resource-title-link');
-                    if (titleLink) {
-                        window.open(titleLink.href, '_blank');
-                    }
-                });
-            } else {
-                card.addEventListener('click', () => {
-                    const url = card.getAttribute('data-url');
-                    if (url) {
-                        window.open(url, '_blank');
-                    }
-                });
-            }
         });
     };
     registerCardTilts();
@@ -297,37 +316,79 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchClearBtn = document.getElementById('search-clear-btn');
     
     let activeCategoryId = '';
+    let renderTimeouts = [];
     
     // Check if resources data is loaded
     const resourcesData = window.RESOURCES_DATA || { categories: [] };
     
-    // Pre-calculate items counts and initialize rendering
+    // Helper to resolve links from optimized JSON format
+    const getLinks = (item) => {
+        if (item.links) return item.links;
+        if (item.name && item.url) return [{"name": item.name, "url": item.url}];
+        return [];
+    };
+    
+    // Helper to resolve fields
+    const getItemType = (item) => item.type || "resource";
+    const getItemDesc = (item) => item.desc || "";
+    const getItemAux = (item) => item.aux || [];
+    const isStarred = (item) => !!item.starred;
+
+    // Clear any active lazy-rendering timeouts
+    const clearRenderQueue = () => {
+        renderTimeouts.forEach(t => clearTimeout(t));
+        renderTimeouts = [];
+    };
+
+    // Render cards in batches to avoid locking the UI thread
+    const renderBatches = (list, startIndex = 0) => {
+        const batchSize = 30;
+        const endIndex = Math.min(startIndex + batchSize, list.length);
+        
+        for (let i = startIndex; i < endIndex; i++) {
+            list[i].grid.appendChild(list[i].el);
+        }
+        
+        if (endIndex < list.length) {
+            const t = setTimeout(() => {
+                renderBatches(list, endIndex);
+            }, 25);
+            renderTimeouts.push(t);
+        } else {
+            // Once fully completed, apply icons and binds
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+            registerHoverTargets();
+            registerCardTilts();
+        }
+    };
+    
+    // Pre-calculate items counts and initialize category menus
     const initResourcesHub = () => {
         if (resourcesData.categories.length === 0) return;
         
-        // Render Category selectors
         sidebarCategories.innerHTML = '';
         mobileCategoriesSelect.innerHTML = '';
         
         resourcesData.categories.forEach((category, index) => {
-            // Count total resource links in category
             let resourceCount = 0;
             category.sections.forEach(sec => {
                 sec.items.forEach(item => {
-                    if (item.type === 'resource') {
-                        resourceCount += item.links.length;
+                    if (getItemType(item) === 'resource') {
+                        resourceCount += getLinks(item).length;
                     }
                 });
             });
             category.totalLinksCount = resourceCount;
             
-            // Render desktop sidebar button
+            // Desktop Category sidebar button
             const btn = document.createElement('button');
             btn.className = 'category-nav-btn magnet-target';
             btn.setAttribute('data-category', category.id);
             btn.style.setProperty('--category-color', category.color);
-            btn.style.setProperty('--category-glow', category.color + '26'); // 15% opacity
-            btn.style.setProperty('--category-highlight', category.color + '0d'); // 5% opacity
+            btn.style.setProperty('--category-glow', category.color + '26');
+            btn.style.setProperty('--category-highlight', category.color + '0d');
             
             btn.innerHTML = `
                 <div class="category-btn-content">
@@ -339,7 +400,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             btn.addEventListener('click', () => {
                 selectCategory(category.id);
-                // Clear search when switching categories
                 if (searchInput.value) {
                     searchInput.value = '';
                     searchClearBtn.style.display = 'none';
@@ -347,14 +407,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             sidebarCategories.appendChild(btn);
             
-            // Render mobile select option
+            // Mobile Category option
             const opt = document.createElement('option');
             opt.value = category.id;
             opt.textContent = `${category.title} (${resourceCount})`;
             mobileCategoriesSelect.appendChild(opt);
         });
         
-        // Listen to mobile selection changes
         mobileCategoriesSelect.addEventListener('change', (e) => {
             selectCategory(e.target.value);
             if (searchInput.value) {
@@ -380,14 +439,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'external-link';
     };
 
-    // Render category contents
+    // Render category feed in batches
     const renderCategoryFeed = (categoryId) => {
         const category = resourcesData.categories.find(c => c.id === categoryId);
         if (!category) return;
         
+        clearRenderQueue();
         resourcesFeed.innerHTML = '';
         
-        // Set CSS variables for theme on parent feed
         resourcesFeed.style.setProperty('--category-color', category.color);
         resourcesFeed.style.setProperty('--category-glow', category.color + '26');
         resourcesFeed.style.setProperty('--category-highlight', category.color + '0d');
@@ -404,26 +463,29 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         resourcesFeed.appendChild(header);
         
-        // Render Sections
+        let cardsToRender = [];
+        
+        // Build Section layouts instantly
         category.sections.forEach(section => {
             const secWrap = document.createElement('div');
             secWrap.className = 'feed-section';
             
-            // Section Title
             const secHeader = document.createElement('div');
             secHeader.className = 'feed-section-header';
             secHeader.innerHTML = `<h3 class="feed-section-title">${section.title}</h3>`;
             secWrap.appendChild(secHeader);
             
-            // Grid container for cards
             const grid = document.createElement('div');
             grid.className = 'resources-grid';
             
             section.items.forEach(item => {
-                if (item.type === 'resource') {
-                    // We render a card for each link inside the resource item
-                    // (Some items contain multiple links, we build a unified card per resource)
-                    item.links.forEach((link, idx) => {
+                const itemType = getItemType(item);
+                if (itemType === 'resource') {
+                    const itemLinks = getLinks(item);
+                    const itemDesc = getItemDesc(item);
+                    const itemAux = getItemAux(item);
+                    
+                    itemLinks.forEach((link, idx) => {
                         const card = document.createElement('article');
                         card.className = 'resource-card liquid-glass magnet-target';
                         card.style.setProperty('--category-color', category.color);
@@ -433,7 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         titleGroup.className = 'resource-title-group';
                         titleGroup.innerHTML = `
                             <a href="${link.url}" target="_blank" class="resource-title-link">${link.name}</a>
-                            ${item.starred ? '<svg class="favorite-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' : ''}
+                            ${isStarred(item) ? '<svg class="favorite-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' : ''}
                         `;
                         
                         const cardHeader = document.createElement('div');
@@ -447,23 +509,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                         card.appendChild(cardHeader);
                         
-                        if (item.description) {
+                        if (itemDesc) {
                             const desc = document.createElement('p');
                             desc.className = 'resource-desc';
-                            desc.textContent = item.description;
+                            desc.textContent = itemDesc;
                             card.appendChild(desc);
                         }
                         
-                        // Auxiliary links
-                        // If it's the first link, display other main links as auxiliary, and append all item.auxiliary
                         let auxLinks = [];
-                        if (idx === 0 && item.links.length > 1) {
-                            for (let k = 1; k < item.links.length; k++) {
-                                auxLinks.push({ name: item.links[k].name, url: item.links[k].url, altSource: true });
+                        if (idx === 0 && itemLinks.length > 1) {
+                            for (let k = 1; k < itemLinks.length; k++) {
+                                auxLinks.push({ name: itemLinks[k].name, url: itemLinks[k].url, altSource: true });
                             }
                         }
-                        if (item.auxiliary) {
-                            auxLinks.push(...item.auxiliary);
+                        if (itemAux) {
+                            auxLinks.push(...itemAux);
                         }
                         
                         if (auxLinks.length > 0) {
@@ -481,16 +541,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             card.appendChild(footer);
                         }
                         
-                        grid.appendChild(card);
+                        cardsToRender.push({ grid: grid, el: card });
                     });
-                } else if (item.type === 'blockquote') {
-                    // Blockquotes (questions, tips)
+                } else if (itemType === 'blockquote') {
                     const bq = document.createElement('blockquote');
                     bq.className = 'resource-blockquote';
                     bq.textContent = item.content;
                     secWrap.appendChild(bq);
-                } else if (item.type === 'alert') {
-                    // Notes, warnings
+                } else if (itemType === 'alert') {
                     const alert = document.createElement('div');
                     alert.className = 'resource-alert';
                     alert.innerHTML = `
@@ -501,8 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="resource-alert-text">${item.content}</p>
                     `;
                     secWrap.appendChild(alert);
-                } else if (item.type === 'text') {
-                    // General explanatory texts
+                } else if (itemType === 'text') {
                     const p = document.createElement('p');
                     p.className = 'resource-text';
                     p.innerHTML = item.content.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
@@ -510,25 +567,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             
-            if (grid.children.length > 0) {
-                secWrap.appendChild(grid);
-            }
+            secWrap.appendChild(grid);
             resourcesFeed.appendChild(secWrap);
         });
         
-        // Re-run Lucide and hover state binds
-        if (window.lucide) {
-            lucide.createIcons();
-        }
-        registerHoverTargets();
-        registerCardTilts();
+        // Launch batch rendering of link cards
+        renderBatches(cardsToRender);
     };
 
-    // Make category selection active
     const selectCategory = (categoryId) => {
         activeCategoryId = categoryId;
         
-        // Update sidebar visual active state
         document.querySelectorAll('.category-nav-btn').forEach(btn => {
             if (btn.getAttribute('data-category') === categoryId) {
                 btn.classList.add('active');
@@ -537,15 +586,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Update mobile selector
         mobileCategoriesSelect.value = categoryId;
-        
-        // Render feed
         renderCategoryFeed(categoryId);
     };
 
     // ==========================================
-    // REAL-TIME SEARCH IMPLEMENTATION
+    // REAL-TIME SEARCH IMPLEMENTATION (Batched)
     // ==========================================
     const highlightQueryText = (text, query) => {
         if (!query) return text;
@@ -559,20 +605,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (cleanQuery === '') {
             searchClearBtn.style.display = 'none';
-            // Render the last selected category normally
             selectCategory(activeCategoryId);
             return;
         }
         
         searchClearBtn.style.display = 'flex';
         resourcesFeed.innerHTML = '';
+        clearRenderQueue();
         
-        // Set standard theme values on feed for search mode
         resourcesFeed.style.setProperty('--category-color', 'var(--accent-teal)');
         resourcesFeed.style.setProperty('--category-glow', 'rgba(45, 212, 191, 0.15)');
         resourcesFeed.style.setProperty('--category-highlight', 'rgba(45, 212, 191, 0.05)');
 
-        // Header for search results
         const searchHeader = document.createElement('div');
         searchHeader.className = 'category-feed-header';
         searchHeader.innerHTML = `
@@ -588,10 +632,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const resultsContainer = document.createElement('div');
         resultsContainer.className = 'search-results-container';
+        resourcesFeed.appendChild(resultsContainer);
         
         let totalMatches = 0;
+        let cardsToRender = [];
         
-        // Scan categories and find items
         resourcesData.categories.forEach(category => {
             let categoryMatches = [];
             
@@ -599,35 +644,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 let sectionMatches = [];
                 
                 section.items.forEach(item => {
-                    if (item.type === 'resource') {
-                        // Check if any link name or description matches the query
-                        const matchingLinks = item.links.filter(link => 
+                    const itemType = getItemType(item);
+                    if (itemType === 'resource') {
+                        const itemLinks = getLinks(item);
+                        const itemDesc = getItemDesc(item);
+                        const itemAux = getItemAux(item);
+                        
+                        const matchingLinks = itemLinks.filter(link => 
                             link.name.toLowerCase().includes(cleanQuery)
                         );
-                        const descMatches = item.description && item.description.toLowerCase().includes(cleanQuery);
+                        const descMatches = itemDesc && itemDesc.toLowerCase().includes(cleanQuery);
                         
                         if (matchingLinks.length > 0 || descMatches) {
-                            // If description matches but links don't, we show all links of this resource card
-                            const linksToDisplay = matchingLinks.length > 0 ? matchingLinks : item.links;
+                            const linksToDisplay = matchingLinks.length > 0 ? matchingLinks : itemLinks;
                             
                             linksToDisplay.forEach(link => {
                                 sectionMatches.push({
                                     type: 'resource',
-                                    starred: item.starred,
+                                    starred: isStarred(item),
                                     name: link.name,
                                     url: link.url,
-                                    description: item.description,
-                                    auxiliary: item.auxiliary || []
+                                    description: itemDesc,
+                                    auxiliary: itemAux
                                 });
                             });
                         }
-                    } else if (item.type === 'blockquote' || item.type === 'alert' || item.type === 'text') {
-                        // Check if texts match
-                        const textContent = item.content || '';
-                        if (textContent.toLowerCase().includes(cleanQuery)) {
+                    } else {
+                        const content = item.content || '';
+                        if (content.toLowerCase().includes(cleanQuery)) {
                             sectionMatches.push({
-                                type: item.type,
-                                content: textContent
+                                type: itemType,
+                                content: content
                             });
                         }
                     }
@@ -643,7 +690,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             if (categoryMatches.length > 0) {
-                // Render category search grouping
                 const catGroup = document.createElement('div');
                 catGroup.className = 'search-results-section';
                 
@@ -702,7 +748,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 });
                                 card.appendChild(footer);
                             }
-                            grid.appendChild(card);
+                            cardsToRender.push({ grid: grid, el: card });
                         } else if (matchItem.type === 'blockquote') {
                             const bq = document.createElement('blockquote');
                             bq.className = 'resource-blockquote';
@@ -728,9 +774,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                     
-                    if (grid.children.length > 0) {
-                        secBlock.appendChild(grid);
-                    }
+                    secBlock.appendChild(grid);
                     catGroup.appendChild(secBlock);
                 });
                 
@@ -744,19 +788,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     No resources found matching "${query}"
                 </div>
             `;
+        } else {
+            renderBatches(cardsToRender);
         }
-        
-        resourcesFeed.appendChild(resultsContainer);
-        
-        // Re-run Lucide and hover state binds
-        if (window.lucide) {
-            lucide.createIcons();
-        }
-        registerHoverTargets();
-        registerCardTilts();
     };
 
-    // Bind real-time search events
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             runResourcesSearch(e.target.value);
@@ -768,7 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Load initial resources hub data
+    // Initialize Hub view
     initResourcesHub();
 
 
@@ -783,15 +819,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeIndex = 0;
     let listItems = [];
 
-    // Static registry of pages, commands, and links
     const commandRegistry = [
         { title: 'Contact / Inquire Form', type: 'action', tags: 'email,hire,message,contact', action: () => openContactModal() },
         { title: 'Navigate: Selected Work', type: 'navigation', tags: 'projects,grid,mystuff', action: () => {
-            tabs[1].click(); // Click My Stuff
+            tabs[1].click();
             setTimeout(() => document.getElementById('projects-section').scrollIntoView({ behavior: 'smooth' }), 100);
         }},
         { title: 'Navigate: Writing & Notes', type: 'navigation', tags: 'blog,articles,mystuff', action: () => {
-            tabs[1].click(); // Click My Stuff
+            tabs[1].click();
             setTimeout(() => document.getElementById('writing-section').scrollIntoView({ behavior: 'smooth' }), 100);
         }},
         { title: 'Switch View: Resources Hub', type: 'navigation', tags: 'main,landing,links', action: () => tabs[0].click() },
@@ -813,7 +848,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modalSearchInput.value = '';
     };
 
-    // Toggle overlay on Hotkey (Ctrl+K or Cmd+K)
     document.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
@@ -836,28 +870,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Fuzzy search matching logic with integrated resources lookup
     const renderResults = (query) => {
         resultsContainer.innerHTML = '';
         const cleanQuery = query.toLowerCase().trim();
         
-        // Filter static registry items
         let filtered = commandRegistry.filter(item => {
             return item.title.toLowerCase().includes(cleanQuery) || 
                    item.tags.toLowerCase().includes(cleanQuery) ||
                    item.type.toLowerCase().includes(cleanQuery);
         });
 
-        // Search dynamic resource items and append matches
         if (cleanQuery !== '') {
             let resourceMatches = [];
             resourcesData.categories.forEach(category => {
                 category.sections.forEach(section => {
                     section.items.forEach(item => {
-                        if (item.type === 'resource') {
-                            item.links.forEach(link => {
+                        if (getItemType(item) === 'resource') {
+                            const itemLinks = getLinks(item);
+                            const itemDesc = getItemDesc(item);
+                            
+                            itemLinks.forEach(link => {
                                 const titleMatch = link.name.toLowerCase().includes(cleanQuery);
-                                const descMatch = item.description && item.description.toLowerCase().includes(cleanQuery);
+                                const descMatch = itemDesc && itemDesc.toLowerCase().includes(cleanQuery);
                                 
                                 if (titleMatch || descMatch) {
                                     resourceMatches.push({
@@ -872,7 +906,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
             });
-            // Cap matches at 15 to avoid performance/modal size constraints
             filtered.push(...resourceMatches.slice(0, 15));
         }
 
@@ -890,7 +923,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = `result-item magnet-target ${index === activeIndex ? 'selected' : ''}`;
             
-            // Icon generation by type
             let iconSvg = '';
             if (item.type.startsWith('Resource')) {
                 iconSvg = `<svg class="result-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`;
@@ -922,13 +954,11 @@ document.addEventListener('DOMContentLoaded', () => {
         registerHoverTargets();
     };
 
-    // Input change binds
     modalSearchInput.addEventListener('input', (e) => {
         activeIndex = 0;
         renderResults(e.target.value);
     });
 
-    // Arrow keys & Enter keyboard navigation logic
     modalSearchInput.addEventListener('keydown', (e) => {
         if (listItems.length === 0) return;
         
