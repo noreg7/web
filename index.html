@@ -1769,47 +1769,14 @@
         // ==========================================
         // 1. ROBUST MOCK RESOURCES DATABASE (Emulates resources-data.js)
         // ==========================================
-        const RESOURCES_DB = [
-            {
-                category: "Privacy & Encryption",
-                id: "privacy",
-                items: [
-                    { title: "ProtonMail", desc: "Secure email service based in Switzerland offering advanced privacy features and end-to-end encryption.", url: "https://proton.me", tags: ["Email", "Security", "Privacy"] },
-                    { title: "Signal Messenger", desc: "Open-source, peer-reviewed cryptographic protocol providing secure instant messaging and metadata reduction.", url: "https://signal.org", tags: ["Messaging", "OpenSource"] },
-                    { title: "Cryptomator", desc: "Multi-platform client-side encryption tool designed specifically for securing your cloud storage assets.", url: "https://cryptomator.org", tags: ["Encryption", "Cloud"] }
-                ]
-            },
-            {
-                category: "Developer Essentials",
-                id: "dev-essentials",
-                items: [
-                    { title: "Neovim IDE", desc: "Vim-fork focused on extensibility and usability, featuring highly responsive asynchronous execution.", url: "https://neovim.io", tags: ["Editor", "Terminal"] },
-                    { title: "Excalidraw", desc: "Virtual whiteboard for sketching hand-drawn diagrams, offering ultra-low friction collaborative pipelines.", url: "https://excalidraw.com", tags: ["Design", "Prototyping"] },
-                    { title: "Tailwind CSS", desc: "A utility-first CSS framework for rapid and fluid UI styling on responsive, multi-screen devices.", url: "https://tailwindcss.com", tags: ["CSS", "Frontend"] }
-                ]
-            },
-            {
-                category: "Media Repositories",
-                id: "media-repos",
-                items: [
-                    { title: "Unsplash API", desc: "Beautiful, free images and photos that can be integrated dynamically inside responsive design mockups.", url: "https://unsplash.com", tags: ["Images", "Assets"] },
-                    { title: "SVGL", desc: "A beautiful library of elegant, clean, and interactive SVG brand logos for high-performance websites.", url: "https://svgl.app", tags: ["Icons", "SVG"] },
-                    { title: "Fontshare", desc: "A free-for-commercial-use premium font service designed for responsive editorial projects.", url: "https://fontshare.com", tags: ["Typography", "Fonts"] }
-                ]
-            },
-            {
-                category: "Self-Hosting",
-                id: "self-hosting",
-                items: [
-                    { title: "CasaOS", desc: "An elegant, lightweight dashboard wrapper designed to build a personal cloud server painlessly over Docker.", url: "https://casaos.io", tags: ["Docker", "Homelab"] },
-                    { title: "Nginx Proxy Manager", desc: "Beautiful UI dashboard that simplifies exposure of local network web services securely via SSL certificates.", url: "https://nginxproxymanager.com", tags: ["Web", "Network"] }
-                ]
-            }
-        ];
+       // ==========================================
+// 1. LINK TO EXTERNAL RESOURCE DATABASE
+// ==========================================
+// If your resources-data.js variable is named 'resourcesData', map it like this:
+const RESOURCES_DB = window.RESOURCES_DATA || []; 
 
-        // Ensure badge counter matches dynamically generated items
-        document.getElementById('category-badge-count').textContent = `${RESOURCES_DB.length} CATEGORIES GENERATED`;
-
+// Ensure badge counter matches your real 26 categories dynamically
+document.getElementById('category-badge-count').textContent = `${RESOURCES_DB.length} CATEGORIES GENERATED`;
         // ==========================================
         // 2. HIGH-PERFORMANCE INTERACTIVE PARTICLES
         // ==========================================
