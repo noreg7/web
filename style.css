@@ -1001,14 +1001,15 @@ body {
 
 /* Grid Layout */
 /* Grid Layout */
+/* Grid Layout */
 .resources-layout {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr; /* Forces a singular responsive column flow */
+    gap: 32px;
+    margin-top: 24px;
     align-items: start;
-    width: 100%;
-    max-width: 500px;
-    margin: 24px auto 0 auto;
-    gap: 0;
+    justify-content: center;
+}
 }
 
 /* Sidebar navigation styling */
