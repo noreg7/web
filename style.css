@@ -1012,6 +1012,7 @@ body {
 }
 
 /* Sidebar navigation styling */
+/* Sidebar navigation styling */
 .resources-sidebar {
     position: sticky;
     top: 90px;
@@ -1021,6 +1022,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 100%;
+    max-width: 450px;      /* Restricts the wide container stretching */
+    margin: 0 auto;        /* Centers it inside the main layout frame safely */
+}
 }
 .sidebar-header {
     font-size: 0.75rem;
