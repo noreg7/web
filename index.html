@@ -1766,17 +1766,11 @@
     
     <!-- Embedded Scripts for Perfect Functionality -->
     <script>
-        // ==========================================
-        // 1. ROBUST MOCK RESOURCES DATABASE (Emulates resources-data.js)
-        // ==========================================
-       // ==========================================
-// 1. LINK TO EXTERNAL RESOURCE DATABASE
-// ==========================================
-// If your resources-data.js variable is named 'resourcesData', map it like this:
-const RESOURCES_DB = window.RESOURCES_DATA || []; 
+    
+        const RESOURCES_DB = window.RESOURCES_DATA || []; 
 
 // Ensure badge counter matches your real 26 categories dynamically
-document.getElementById('category-badge-count').textContent = `${RESOURCES_DB.length} CATEGORIES GENERATED`;
+        document.getElementById('category-badge-count').textContent = `${RESOURCES_DB.length} CATEGORIES GENERATED`;
         // ==========================================
         // 2. HIGH-PERFORMANCE INTERACTIVE PARTICLES
         // ==========================================
