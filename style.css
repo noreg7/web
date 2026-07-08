@@ -1000,12 +1000,15 @@ body {
 }
 
 /* Grid Layout */
+/* Grid Layout */
 .resources-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 32px;
-    margin-top: 24px;
+    display: flex;
+    justify-content: center;
     align-items: start;
+    width: 100%;
+    max-width: 500px;
+    margin: 24px auto 0 auto;
+    gap: 0;
 }
 
 /* Sidebar navigation styling */
