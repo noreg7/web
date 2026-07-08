@@ -39,6 +39,12 @@
                 HUB <span class="highlight">//</span> 2026
             </div>
             
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs font-mono">
+                <button class="nav-tab active magnet-target" data-tab="resources">Resources</button>
+                <button class="nav-tab magnet-target" data-tab="mystuff">My Stuff</button>
+            </div>
+            
             <div class="nav-widgets">
                 <!-- Status Widget -->
                 <div class="status-badge">
@@ -61,171 +67,226 @@
     <!-- Main Container -->
     <main class="main-layout">
         
-        <!-- Header / Hero Section -->
-        <header class="hero-card liquid-glass">
-            <div class="hero-badge">
-                <span class="status-pulse bg-emerald-400"></span>
-                <span>OPEN FOR OFFERS</span>
-            </div>
-            
-            <h1 class="hero-title text-glow">
-                Hi, I'm <span class="gradient-text">[Your Name]</span>
-            </h1>
-            
-            <p class="hero-subtitle">
-                Welcome to my digital space. A high-performance collection of my engineering projects, experimental prototypes, and architectural thoughts.
-            </p>
-            
-            <div class="hero-actions">
-                <a href="https://github.com/yourusername" target="_blank" class="btn btn-primary magnet-target">
-                    <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.11.82-.26.82-.577v-2.234c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.82 1.102.82 2.222v3.293c0 .319.22.694.825.576C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-                    </svg>
-                    <span>GitHub Profile</span>
-                </a>
-                <button class="btn btn-secondary magnet-target" id="contact-trigger">
-                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                        <polyline points="22,6 12,13 2,6"></polyline>
-                    </svg>
-                    <span>Inquire / Contact</span>
-                </button>
-            </div>
-        </header>
-
-        <!-- Live Activity Status Module -->
-        <section class="activity-section liquid-glass">
-            <div class="activity-header">
-                <span class="activity-pulse bg-emerald-400"></span>
-                <span class="font-mono text-xs uppercase tracking-wider text-emerald-300">Live Status</span>
-            </div>
-            <div class="activity-content">
-                <div class="activity-icon-wrap">
-                    <!-- Rotating CD/Code Icon -->
-                    <svg class="status-cd-icon spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
+        <!-- ==========================================
+             TAB 1: RESOURCES HUB (MAIN LANDING)
+             ========================================== -->
+        <div id="tab-resources" class="tab-content active">
+            <header class="resources-hero">
+                <div class="hero-badge font-mono">
+                    <span class="status-pulse bg-teal-400"></span>
+                    <span>26 CATEGORIES GENERATED</span>
                 </div>
-                <div class="activity-details">
-                    <p class="activity-title text-emerald-100 font-medium">Refining digital experience models</p>
-                    <p class="activity-sub text-emerald-100/50 text-xs font-mono">WORKSPACE // C:/Users/aadit/Gemini/Antigravity/scratch/modern-hub</p>
+                <h1 class="resources-title text-glow">
+                    Resource <span class="gradient-text">Hub</span>
+                </h1>
+                <p class="resources-subtitle">
+                    Explore a highly interactive database of tools, privacy assets, media repositories, educational guides, and developer essentials.
+                </p>
+                
+                <!-- Search bar -->
+                <div class="search-bar-wrapper liquid-glass magnet-target">
+                    <svg class="search-bar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="resources-search-input" placeholder="Fuzzy search across category files and 1,000+ links..." autocomplete="off">
+                    <button class="search-clear-btn" id="search-clear-btn" aria-label="Clear search" style="display: none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
                 </div>
+            </header>
+            
+            <div class="resources-layout">
+                <!-- Desktop Sidebar Navigation -->
+                <aside class="resources-sidebar liquid-glass">
+                    <div class="sidebar-header font-mono text-xs uppercase tracking-wider text-emerald-300/40">
+                        Categories
+                    </div>
+                    <nav class="sidebar-nav" id="sidebar-categories">
+                        <!-- Populated Dynamically -->
+                    </nav>
+                </aside>
+                
+                <!-- Mobile Category Selection Dropdown -->
+                <div class="mobile-category-dropdown liquid-glass">
+                    <select id="mobile-categories-select" aria-label="Select Resource Category">
+                        <!-- Populated Dynamically -->
+                    </select>
+                    <div class="select-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Main Resources Feed -->
+                <section class="resources-feed" id="resources-feed">
+                    <!-- Populated Dynamically -->
+                </section>
             </div>
-        </section>
+        </div>
 
-        <!-- Projects Grid Section -->
-        <section class="section-container" id="projects-section">
-            <div class="section-header">
+        <!-- ==========================================
+             TAB 2: MY STUFF (PORTFOLIO CONTENT)
+             ========================================== -->
+        <div id="tab-mystuff" class="tab-content">
+            
+            <!-- Header / Hero Section -->
+            <header class="hero-card liquid-glass">
+                <div class="hero-badge">
+                    <span class="status-pulse bg-emerald-400"></span>
+                    <span>OPEN FOR OFFERS</span>
+                </div>
+                
+                <h1 class="hero-title text-glow">
+                    Hi, I'm <span class="gradient-text">[Your Name]</span>
+                </h1>
+                
+                <p class="hero-subtitle">
+                    Welcome to my digital space. A high-performance collection of my engineering projects, experimental prototypes, and architectural thoughts.
+                </p>
+                
+                <div class="hero-actions">
+                    <a href="https://github.com/yourusername" target="_blank" class="btn btn-primary magnet-target">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.11.82-.26.82-.577v-2.234c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.82 1.102.82 2.222v3.293c0 .319.22.694.825.576C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                        <span>GitHub Profile</span>
+                    </a>
+                    <button class="btn btn-secondary magnet-target" id="contact-trigger">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>Inquire / Contact</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Live Activity Status Module -->
+            <section class="activity-section liquid-glass">
+                <div class="activity-header">
+                    <span class="activity-pulse bg-emerald-400"></span>
+                    <span class="font-mono text-xs uppercase tracking-wider text-emerald-300">Live Status</span>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-icon-wrap">
+                        <svg class="status-cd-icon spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div class="activity-details">
+                        <p class="activity-title text-emerald-100 font-medium">Refining digital experience models</p>
+                        <p class="activity-sub text-emerald-100/50 text-xs font-mono">WORKSPACE // C:/Users/aadit/Gemini/Antigravity/scratch/modern-hub</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Grid Section -->
+            <section class="section-container" id="projects-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="header-indicator bg-emerald-400"></span>
+                        Selected Work
+                    </h2>
+                    
+                    <div class="tag-filters">
+                        <button class="filter-btn active magnet-target" data-filter="all">All</button>
+                        <button class="filter-btn magnet-target" data-filter="go">Go</button>
+                        <button class="filter-btn magnet-target" data-filter="js">JavaScript</button>
+                        <button class="filter-btn magnet-target" data-filter="css">CSS</button>
+                        <button class="filter-btn magnet-target" data-filter="backend">Backend</button>
+                    </div>
+                </div>
+                
+                <div class="projects-grid" id="projects-grid">
+                    <article class="project-card liquid-glass magnet-target" data-tags="go,backend,api" data-url="https://github.com/yourusername/project-alpha">
+                        <div class="project-glow"></div>
+                        <div class="project-header">
+                            <h3 class="project-title text-glow">Project Alpha</h3>
+                            <span class="project-year">2026</span>
+                        </div>
+                        <p class="project-desc">
+                            A scalable, ultra-low latency API gateway written in Go. Handles complex routing rules, rate limiting, and real-time telemetry streaming.
+                        </p>
+                        <div class="project-tags">
+                            <span class="tag">#Go</span>
+                            <span class="tag">#Docker</span>
+                            <span class="tag">#API</span>
+                            <span class="tag">#Telemetry</span>
+                        </div>
+                    </article>
+
+                    <article class="project-card liquid-glass magnet-target" data-tags="js,css,a11y" data-url="https://github.com/yourusername/nexus-ui">
+                        <div class="project-glow"></div>
+                        <div class="project-header">
+                            <h3 class="project-title text-glow">Nexus UI</h3>
+                            <span class="project-year">2025</span>
+                        </div>
+                        <p class="project-desc">
+                            A strictly vanilla JS UI system designed for web applications. Fully focused on accessibility compliance, lighting fast load times, and customizability.
+                        </p>
+                        <div class="project-tags">
+                            <span class="tag">#JavaScript</span>
+                            <span class="tag">#CSS</span>
+                            <span class="tag">#A11y</span>
+                            <span class="tag">#Vanilla</span>
+                        </div>
+                    </article>
+
+                    <article class="project-card liquid-glass magnet-target" data-tags="js,backend" data-url="https://github.com/yourusername/hyper-db">
+                        <div class="project-glow"></div>
+                        <div class="project-header">
+                            <h3 class="project-title text-glow">HyperDB</h3>
+                            <span class="project-year">2026</span>
+                        </div>
+                        <p class="project-desc">
+                            An in-memory key-value database built using Node.js clustering. Features atomic disk persistence, visual admin console, and native JSON pipelines.
+                        </p>
+                        <div class="project-tags">
+                            <span class="tag">#JavaScript</span>
+                            <span class="tag">#Backend</span>
+                            <span class="tag">#Clustering</span>
+                            <span class="tag">#Performance</span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Blog/Writing Section -->
+            <section class="section-container" id="writing-section">
                 <h2 class="section-title">
-                    <span class="header-indicator bg-emerald-400"></span>
-                    Selected Work
+                    <span class="header-indicator bg-teal-400"></span>
+                    Writing & Notes
                 </h2>
                 
-                <!-- Dynamic Filters -->
-                <div class="tag-filters">
-                    <button class="filter-btn active magnet-target" data-filter="all">All</button>
-                    <button class="filter-btn magnet-target" data-filter="go">Go</button>
-                    <button class="filter-btn magnet-target" data-filter="js">JavaScript</button>
-                    <button class="filter-btn magnet-target" data-filter="css">CSS</button>
-                    <button class="filter-btn magnet-target" data-filter="backend">Backend</button>
+                <div class="blog-list">
+                    <a href="/blog/the-myth-of-clean-code.html" class="blog-item liquid-glass magnet-target">
+                        <div class="blog-info">
+                            <h3 class="blog-title">The Myth of Clean Code</h3>
+                            <p class="blog-summary">Why keeping it simple and transparent beats keeping it deeply abstract and nested.</p>
+                        </div>
+                        <div class="blog-meta">
+                            <span class="blog-date">Jul 01, 2026</span>
+                            <span class="blog-read-time">5 min read</span>
+                        </div>
+                    </a>
+
+                    <a href="/blog/deploying-on-github-pages.html" class="blog-item liquid-glass magnet-target">
+                        <div class="blog-info">
+                            <h3 class="blog-title">Zero-Bullshit Deployment</h3>
+                            <p class="blog-summary">Hosting enterprise-grade scalable static sites on GitHub Pages for free with custom domains.</p>
+                        </div>
+                        <div class="blog-meta">
+                            <span class="blog-date">Jun 15, 2026</span>
+                            <span class="blog-read-time">3 min read</span>
+                        </div>
+                    </a>
                 </div>
-            </div>
-            
-            <div class="projects-grid" id="projects-grid">
-                
-                <!-- Project Card 1 -->
-                <article class="project-card liquid-glass magnet-target" data-tags="go,backend,api" data-url="https://github.com/yourusername/project-alpha">
-                    <div class="project-glow"></div>
-                    <div class="project-header">
-                        <h3 class="project-title text-glow">Project Alpha</h3>
-                        <span class="project-year">2026</span>
-                    </div>
-                    <p class="project-desc">
-                        A scalable, ultra-low latency API gateway written in Go. Handles complex routing rules, rate limiting, and real-time telemetry streaming.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">#Go</span>
-                        <span class="tag">#Docker</span>
-                        <span class="tag">#API</span>
-                        <span class="tag">#Telemetry</span>
-                    </div>
-                </article>
-
-                <!-- Project Card 2 -->
-                <article class="project-card liquid-glass magnet-target" data-tags="js,css,a11y" data-url="https://github.com/yourusername/nexus-ui">
-                    <div class="project-glow"></div>
-                    <div class="project-header">
-                        <h3 class="project-title text-glow">Nexus UI</h3>
-                        <span class="project-year">2025</span>
-                    </div>
-                    <p class="project-desc">
-                        A strictly vanilla JS UI system designed for web applications. Fully focused on accessibility compliance, lighting fast load times, and customizability.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">#JavaScript</span>
-                        <span class="tag">#CSS</span>
-                        <span class="tag">#A11y</span>
-                        <span class="tag">#Vanilla</span>
-                    </div>
-                </article>
-
-                <!-- Project Card 3 -->
-                <article class="project-card liquid-glass magnet-target" data-tags="js,backend" data-url="https://github.com/yourusername/hyper-db">
-                    <div class="project-glow"></div>
-                    <div class="project-header">
-                        <h3 class="project-title text-glow">HyperDB</h3>
-                        <span class="project-year">2026</span>
-                    </div>
-                    <p class="project-desc">
-                        An in-memory key-value database built using Node.js clustering. Features atomic disk persistence, visual admin console, and native JSON pipelines.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">#JavaScript</span>
-                        <span class="tag">#Backend</span>
-                        <span class="tag">#Clustering</span>
-                        <span class="tag">#Performance</span>
-                    </div>
-                </article>
-
-            </div>
-        </section>
-
-        <!-- Blog/Writing Section -->
-        <section class="section-container" id="writing-section">
-            <h2 class="section-title">
-                <span class="header-indicator bg-teal-400"></span>
-                Writing & Notes
-            </h2>
-            
-            <div class="blog-list">
-                
-                <!-- Blog Item 1 -->
-                <a href="/blog/the-myth-of-clean-code.html" class="blog-item liquid-glass magnet-target">
-                    <div class="blog-info">
-                        <h3 class="blog-title">The Myth of Clean Code</h3>
-                        <p class="blog-summary">Why keeping it simple and transparent beats keeping it deeply abstract and nested.</p>
-                    </div>
-                    <div class="blog-meta">
-                        <span class="blog-date">Jul 01, 2026</span>
-                        <span class="blog-read-time">5 min read</span>
-                    </div>
-                </a>
-
-                <!-- Blog Item 2 -->
-                <a href="/blog/deploying-on-github-pages.html" class="blog-item liquid-glass magnet-target">
-                    <div class="blog-info">
-                        <h3 class="blog-title">Zero-Bullshit Deployment</h3>
-                        <p class="blog-summary">Hosting enterprise-grade scalable static sites on GitHub Pages for free with custom domains.</p>
-                    </div>
-                    <div class="blog-meta">
-                        <span class="blog-date">Jun 15, 2026</span>
-                        <span class="blog-read-time">3 min read</span>
-                    </div>
-                </a>
-
-            </div>
-        </section>
+            </section>
+        </div>
 
         <!-- Footer Section -->
         <footer class="footer">
@@ -239,14 +300,14 @@
 
     </main>
 
-    <!-- Command Palette (Cmd+K Modal Overlay) -->
+    <!-- Command Palette (Ctrl+K Modal Overlay) -->
     <div class="modal-overlay" id="command-modal" aria-hidden="true" role="dialog">
         <div class="modal-card liquid-glass">
             <div class="modal-search-wrapper">
                 <svg class="modal-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
-                <input type="text" id="modal-search-input" placeholder="Type a command or search project tags..." autocomplete="off">
+                <input type="text" id="modal-search-input" placeholder="Type a command or search hub links..." autocomplete="off">
                 <span class="modal-close-hint">ESC</span>
             </div>
             
@@ -292,7 +353,9 @@
         </div>
     </div>
 
-    <!-- Load main script -->
+    <!-- Load scripts -->
+    <script src="resources-data.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="script.js"></script>
 </body>
 </html>
