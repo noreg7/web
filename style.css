@@ -81,45 +81,18 @@ body {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* 2. Interactive Custom Cursor (Only on Desktop pointer devices) */
-@media (hover: hover) and (pointer: fine) {
-    body {
-        cursor: none;
-    }
-    .cursor-outer {
-        position: fixed;
-        width: 32px;
-        height: 32px;
-        border: 1px solid var(--accent-emerald);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 10000;
-        transform: translate(-50%, -50%);
-        transition: width var(--transition-fast), height var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
-    }
-    .cursor-inner {
-        position: fixed;
-        width: 6px;
-        height: 6px;
-        background-color: var(--accent-emerald);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 10001;
-        transform: translate(-50%, -50%);
-        transition: transform 0.05s ease-out;
-    }
-    /* Cursor States */
-    body.cursor-hovering .cursor-outer {
-        width: 48px;
-        height: 48px;
-        background-color: rgba(52, 211, 153, 0.08);
-        border-color: var(--accent-teal);
-    }
-    body.cursor-clicking .cursor-outer {
-        width: 24px;
-        height: 24px;
-        background-color: rgba(52, 211, 153, 0.2);
-    }
+/* 2. Inline Text Links (Parsed Markdown Links) */
+.text-link {
+    color: var(--accent-teal);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-fast);
+    border-bottom: 1px dashed rgba(20, 184, 166, 0.3);
+}
+.text-link:hover {
+    color: var(--accent-emerald);
+    border-bottom-color: var(--accent-emerald);
+    text-shadow: 0 0 8px var(--accent-glow);
 }
 
 /* 3. Deep Aurora Mesh Background */
@@ -183,7 +156,7 @@ body {
     border-bottom: 1px solid var(--glass-border);
 }
 .nav-container {
-    max-width: 1000px;
+    max-width: 1300px;
     height: 100%;
     margin: 0 auto;
     padding: 0 24px;
@@ -260,7 +233,7 @@ body {
 
 /* 6. Main Layout Structure */
 .main-layout {
-    max-width: 900px;
+    max-width: 1300px;
     margin: 0 auto;
     padding: 120px 24px 80px;
     position: relative;
