@@ -998,21 +998,18 @@ body {
     width: 16px;
     height: 16px;
 }
-
-/* Grid Layout */
-/* Grid Layout */
 /* Grid Layout */
 .resources-layout {
     display: grid;
-    grid-template-columns: 1fr; /* Forces a singular responsive column flow */
+    grid-template-columns: 1fr;
     gap: 32px;
     margin-top: 24px;
     align-items: start;
     justify-content: center;
 }
-}
 
 /* Sidebar navigation styling */
+.resources-sidebar {
 /* Sidebar navigation styling */
 .resources-sidebar {
     position: sticky;
@@ -1024,10 +1021,10 @@ body {
     flex-direction: column;
     gap: 16px;
     width: 100%;
-    max-width: 450px;      /* Restricts the wide container stretching */
-    margin: 0 auto;        /* Centers it inside the main layout frame safely */
+    max-width: 480px;
+    margin: 0 auto;
 }
-}
+
 .sidebar-header {
     font-size: 0.75rem;
     font-weight: 700;
